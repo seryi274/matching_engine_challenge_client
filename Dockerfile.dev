@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-LABEL description="Dev container for matching-engine-challenge students"
+LABEL description="Dev container for matching-engine-challenge participants"
 LABEL maintainer="matching-engine-challenge"
 
 ENV DEBIAN_FRONTEND=noninteractive

@@ -6,17 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Performance flags for release builds. The server builds with GCC on Linux;
-# the MSVC branch only exists so Windows students can build locally.
+# the MSVC branch only exists so Windows participants can build locally.
 if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "/O2 /DNDEBUG")
 else()
     set(CMAKE_CXX_FLAGS_RELEASE "-O2 -march=native -DNDEBUG")
 endif()
 
-# Students may add extra source files in src/ (flat, no sub-directories)
-file(GLOB STUDENT_SOURCES src/*.cpp src/*.cc)
+# Participants may add extra source files in src/ (flat, no sub-directories)
+file(GLOB PARTICIPANT_SOURCES src/*.cpp src/*.cc)
 
-add_library(matching_engine ${STUDENT_SOURCES})
+add_library(matching_engine ${PARTICIPANT_SOURCES})
 target_include_directories(matching_engine PUBLIC include)
 
 # Correctness tests

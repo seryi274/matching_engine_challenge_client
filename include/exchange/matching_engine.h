@@ -9,7 +9,7 @@ namespace exchange {
 /// ============================================================
 ///  MatchingEngine
 ///
-///  Students implement ALL methods in src/matching_engine.cpp.
+///  Participants implement ALL methods in src/matching_engine.cpp.
 ///  They may add any private members, helper classes, or internal
 ///  data structures they wish. The public interface is FIXED --
 ///  DO NOT MODIFY THIS FILE.
@@ -96,7 +96,7 @@ public:
 
 private:
     // ============================================================
-    //  STUDENT: Add your data structures here.
+    //  PARTICIPANT: Add your data structures here.
     //
     //  Suggested starting point (naive but correct):
     //    - std::unordered_map<std::string, OrderBook> books_

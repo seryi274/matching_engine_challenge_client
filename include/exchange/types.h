@@ -26,7 +26,7 @@ enum class OrderStatus : uint8_t {
 // ============================================================
 
 /// Incoming order request. This is purely an input message --
-/// students design their own internal order representation.
+/// participants design their own internal order representation.
 struct OrderRequest {
     std::string symbol;     // Instrument identifier (e.g., "AAPL")
     Side        side;

@@ -37,8 +37,9 @@ struct Stats {
     double  throughput_ops;
 };
 
+/// Reorders `latencies`.  Percentiles use nth_element: the same values a full
+/// sort would give, at a fraction of the cost for 10M samples.
 static Stats computeStats(std::vector<int64_t>& latencies, double total_seconds) {
-    std::sort(latencies.begin(), latencies.end());
     size_t n = latencies.size();
 
     double sum = 0;
@@ -51,14 +52,27 @@ static Stats computeStats(std::vector<int64_t>& latencies, double total_seconds)
         var_sum += d * d;
     }
 
+    auto [min_it, max_it] = std::minmax_element(latencies.begin(), latencies.end());
+    int64_t min_ns = *min_it;
+    int64_t max_ns = *max_it;
+
+    auto percentile = [&](size_t pct) {
+        auto nth = latencies.begin() + n * pct / 100;
+        std::nth_element(latencies.begin(), nth, latencies.end());
+        return *nth;
+    };
+    int64_t p50 = percentile(50);
+    int64_t p90 = percentile(90);
+    int64_t p99 = percentile(99);
+
     return Stats{
-        latencies.front(),
-        latencies.back(),
+        min_ns,
+        max_ns,
         mean,
         std::sqrt(var_sum / n),
-        latencies[n * 50 / 100],
-        latencies[n * 90 / 100],
-        latencies[n * 99 / 100],
+        p50,
+        p90,
+        p99,
         n / total_seconds
     };
 }
@@ -67,7 +81,15 @@ static Stats computeStats(std::vector<int64_t>& latencies, double total_seconds)
 //  Run one scenario
 // ============================================================
 
-static Stats runScenario(Scenario scenario, size_t warmup_ops, size_t measure_ops) {
+struct ActionStream {
+    std::vector<BenchAction> warmup;
+    std::vector<BenchAction> measure;
+};
+
+/// The stream depends only on the scenario's fixed seed, so it is generated
+/// once and replayed by every iteration (generation costs about as much as
+/// the measured loop itself).
+static ActionStream generateStream(Scenario scenario, size_t warmup_ops, size_t measure_ops) {
     static const std::vector<std::string> symbols = {
         "AAPL", "GOOG", "MSFT", "AMZN", "TSLA"
     };
@@ -81,9 +103,16 @@ static Stats runScenario(Scenario scenario, size_t warmup_ops, size_t measure_op
 
     OrderGenerator gen(seed, scenario, symbols);
 
-    // Pre-generate all actions
-    auto warmup_actions = gen.generate(warmup_ops);
-    auto measure_actions = gen.generate(measure_ops);
+    ActionStream stream;
+    stream.warmup = gen.generate(warmup_ops);
+    stream.measure = gen.generate(measure_ops);
+    return stream;
+}
+
+/// One iteration on a fresh engine.  `latencies` is a reusable buffer.
+static Stats runScenario(const ActionStream& stream, std::vector<int64_t>& latencies) {
+    const auto& warmup_actions = stream.warmup;
+    const auto& measure_actions = stream.measure;
 
     NullListener listener;
     MatchingEngine engine(&listener);
@@ -105,8 +134,8 @@ static Stats runScenario(Scenario scenario, size_t warmup_ops, size_t measure_op
     }
 
     // Measurement phase
-    std::vector<int64_t> latencies;
-    latencies.reserve(measure_ops);
+    latencies.clear();
+    latencies.reserve(measure_actions.size());
 
     auto total_start = Clock::now();
 
@@ -186,11 +215,14 @@ int main(int argc, char* argv[]) {
         std::printf("  Measure: %zu ops x %d iterations\n\n", MEASURE_OPS, ITERATIONS);
     }
 
+    std::vector<int64_t> latencies;
+
     for (auto& sr : scenarios) {
         std::vector<Stats> iteration_stats;
+        const ActionStream stream = generateStream(sr.scenario, WARMUP_OPS, MEASURE_OPS);
 
         for (int iter = 0; iter < ITERATIONS; ++iter) {
-            auto stats = runScenario(sr.scenario, WARMUP_OPS, MEASURE_OPS);
+            auto stats = runScenario(stream, latencies);
             iteration_stats.push_back(stats);
         }
 

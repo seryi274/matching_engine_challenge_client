@@ -47,6 +47,7 @@ python3 submit.py
 - `include/exchange/types.h`, `test/`, `bench/` and `CMakeLists.txt` are the harness. The server uses its own copies, so local edits to them have no effect on your score.
 - **Single-threaded only.** No threads, no async, no coroutines, no multi-process tricks.
 - The server compiles with `g++ -std=c++20 -O2 -march=native -DNDEBUG -Wall -Werror`. Warnings are errors.
+- Remove debug printing before you submit. A test or benchmark run that prints more than 32 MiB is stopped and the submission fails, and printing slows your benchmark anyway.
 - You must pass **all 29 correctness tests** to be ranked.
 - One submission per team every 2 minutes.
 

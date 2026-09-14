@@ -38,16 +38,21 @@ public:
 static int tests_run = 0;
 static int tests_passed = 0;
 
+// Output is flushed after the test name and after PASS: when stdout is a pipe
+// (the server captures it), anything still buffered is lost if the engine
+// crashes, and the log would not show which test it crashed in.
 #define TEST(name)                                               \
     static void test_##name(TestListener& L, MatchingEngine& E); \
     static void run_##name() {                                   \
         tests_run++;                                             \
+        std::printf("  [%2d] %-50s ", tests_run, #name);        \
+        std::fflush(stdout);                                     \
         TestListener L;                                          \
         MatchingEngine E(&L);                                    \
-        std::printf("  [%2d] %-50s ", tests_run, #name);        \
         test_##name(L, E);                                       \
         tests_passed++;                                          \
         std::printf("PASS\n");                                   \
+        std::fflush(stdout);                                     \
     }                                                            \
     static void test_##name(TestListener& L, MatchingEngine& E)
 

@@ -41,7 +41,7 @@ python3 submit.py
 
 ## Rules
 
-- Teams of 3-4 people.
+- Teams of 5 people.
 - Implement the `MatchingEngine` class in `src/matching_engine.cpp`. You may add more `.cpp` and `.h` files directly inside `src/` (no sub-directories); the build picks them up automatically.
 - You may add **private members**, helper types and `#include` directives to `include/exchange/matching_engine.h`. Do **not** change the public interface (constructor, method signatures).
 - `include/exchange/types.h`, `test/`, `bench/` and `CMakeLists.txt` are the harness. The server uses its own copies, so local edits to them have no effect on your score.

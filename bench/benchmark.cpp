@@ -38,7 +38,7 @@ struct Stats {
 };
 
 /// Reorders `latencies`.  Percentiles use nth_element: the same values a full
-/// sort would give, at a fraction of the cost for 10M samples.
+/// sort would give, at a fraction of the cost for millions of samples.
 static Stats computeStats(std::vector<int64_t>& latencies, double total_seconds) {
     size_t n = latencies.size();
 
@@ -189,7 +189,7 @@ static void printStats(const char* name, const Stats& s) {
 
 int main(int argc, char* argv[]) {
     constexpr size_t WARMUP_OPS  = 500'000;
-    constexpr size_t MEASURE_OPS = 10'000'000;
+    constexpr size_t MEASURE_OPS = 2'000'000;
     constexpr int    ITERATIONS  = 3;
 
     bool json_output = false;

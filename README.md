@@ -141,7 +141,7 @@ All 29 tests must pass. A submission that fails any test is recorded but never r
 
 ### Performance (ranking)
 
-The server runs the benchmark binary three times and keeps the best run. Each run executes, per scenario, a 500,000-operation warm-up followed by 3 iterations of 10,000,000 operations and reports the median iteration.
+The server runs the benchmark binary three times and keeps the best run. Each run executes, per scenario, a 500,000-operation warm-up followed by 3 iterations of 2,000,000 operations and reports the median iteration.
 
 | Scenario | Weight | Description |
 |----------|--------|-------------|

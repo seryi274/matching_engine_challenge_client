@@ -49,7 +49,7 @@ python3 submit.py
 - The server compiles with `g++ -std=c++20 -O2 -march=native -DNDEBUG -Wall -Werror`. Warnings are errors.
 - Remove debug printing before you submit. A test or benchmark run that prints more than 32 MiB is stopped and the submission fails, and printing slows your benchmark anyway.
 - You must pass **all 29 correctness tests** to be ranked.
-- One submission per team every 2 minutes.
+- One submission per team every 5 minutes.
 
 ## Submitting
 

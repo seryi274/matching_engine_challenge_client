@@ -9,4 +9,4 @@
 
 TEAM_NAME = ""
 PASSWORD = ""
-SERVER = ""
+SERVER = "3.254.122.192:8000"

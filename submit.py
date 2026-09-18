@@ -176,7 +176,7 @@ def wait_for_result(server: str, submission_id: int) -> dict:
         if status in TERMINAL_STATES:
             return payload
         time.sleep(POLL_INTERVAL_S)
-    raise SubmitError("Timed out waiting for the server; check the leaderboard or /api/status later")
+    raise SubmitError(f"Timed out waiting for the server; check the leaderboard or {url} later")
 
 
 def tail(text: str, lines: int = 30) -> str:

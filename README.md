@@ -33,11 +33,15 @@ cmake --build build
 ./build/test_correctness     # must end with "29/29 tests passed."
 ./build/benchmark            # local latency and throughput numbers
 
-# Submit: edit config.py (TEAM_NAME, PASSWORD, SERVER), then
-python3 submit.py
+# Edit config.py (TEAM_NAME, PASSWORD, SERVER), then try it out:
+python3 check.py             # practice server: builds and tests, not scored
+python3 submit.py            # the real thing: scored, ranked, rate limited
 ```
 
-`submit.py` and `test.py` need Python 3.8 or newer and nothing else: standard library only, nothing to install.
+No compiler on your machine? Skip the two `cmake` lines and use `python3 check.py`:
+the practice server builds and tests your code for you, as often as you like.
+
+`check.py`, `submit.py` and `test.py` need Python 3.8 or newer and nothing else: standard library only, nothing to install.
 
 ## Rules
 
@@ -169,6 +173,21 @@ cmake --build build
 This matches the server toolchain (`g++ -std=c++20 -O2 -march=native
 -DNDEBUG -Wall -Werror`) as closely as CMake's Release flags allow.
 
+### No toolchain? Use the practice server
+
+If you cannot build locally -- no compiler, a locked-down laptop, a Windows
+setup that fights you -- let the practice server do it:
+
+```bash
+python3 check.py
+```
+
+It uploads your `src/` and `include/`, compiles them with the same g++ 13 the
+scoring server uses, runs all 29 correctness tests and prints the result,
+usually in under ten seconds. No rate limit, no benchmark, no leaderboard
+entry: use it as your edit-compile-test loop and keep `submit.py` for when you
+want a score.
+
 ## Project Structure
 
 ```
@@ -185,6 +204,7 @@ matching_engine_challenge_client/
 |   |-- order_generator.h/.cpp   # Deterministic order stream generator
 |-- CMakeLists.txt               # Build (C++20, -O2 -march=native)
 |-- config.py                    # TEAM_NAME, PASSWORD, SERVER
+|-- check.py                     # Build and test on the practice server (not scored)
 |-- submit.py                    # Upload src/ + matching_engine.h and stream the result
 |-- test.py                      # Local build + correctness tests
 |-- leaderboard.txt              # Leaderboard URL

@@ -38,6 +38,11 @@ public:
 static int tests_run = 0;
 static int tests_passed = 0;
 
+// Thrown by a failed assertion. Caught by the test runner so the remaining
+// tests still run: a submission that breaks one rule usually breaks several,
+// and reporting them all in one go beats one failure per round trip.
+struct TestFailure {};
+
 // Output is flushed after the test name and after PASS: when stdout is a pipe
 // (the server captures it), anything still buffered is lost if the engine
 // crashes, and the log would not show which test it crashed in.
@@ -49,9 +54,13 @@ static int tests_passed = 0;
         std::fflush(stdout);                                     \
         TestListener L;                                          \
         MatchingEngine E(&L);                                    \
-        test_##name(L, E);                                       \
-        tests_passed++;                                          \
-        std::printf("PASS\n");                                   \
+        try {                                                    \
+            test_##name(L, E);                                   \
+            tests_passed++;                                      \
+            std::printf("PASS\n");                               \
+        } catch (const TestFailure&) {                           \
+            /* the assertion already printed FAIL and why */     \
+        }                                                        \
         std::fflush(stdout);                                     \
     }                                                            \
     static void test_##name(TestListener& L, MatchingEngine& E)
@@ -61,7 +70,8 @@ static int tests_passed = 0;
     if (_a != _b) {                                              \
         std::printf("FAIL\n    %s:%d: %s != %s\n",              \
             __FILE__, __LINE__, #a, #b);                         \
-        std::exit(1);                                            \
+        std::fflush(stdout);                                     \
+        throw TestFailure{};                                     \
     }                                                            \
 } while(0)
 
@@ -69,7 +79,8 @@ static int tests_passed = 0;
     if (!(x)) {                                                  \
         std::printf("FAIL\n    %s:%d: %s is false\n",           \
             __FILE__, __LINE__, #x);                             \
-        std::exit(1);                                            \
+        std::fflush(stdout);                                     \
+        throw TestFailure{};                                     \
     }                                                            \
 } while(0)
 

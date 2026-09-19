@@ -26,8 +26,8 @@ A matching engine is the core of every financial exchange. It receives buy and s
 git clone https://github.com/seryi274/matching_engine_challenge_client.git
 cd matching_engine_challenge_client
 
-# Build with Ninja (Release + g++ are now the CMake defaults)
-cmake -B build -G Ninja
+# Build in Release mode with g++ and Ninja
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
 cmake --build build
 
 ./build/test_correctness     # must end with "29/29 tests passed."
@@ -159,16 +159,15 @@ Operations are roughly 70% adds, 20-25% cancels and 5-10% amends across 5 symbol
 Requirements: cmake 3.16+, g++ 13+ (C++20) and Ninja.
 
 ```bash
-cmake -B build -G Ninja
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
 cmake --build build
 
 ./build/test_correctness
 ./build/benchmark
 ```
 
-CMake defaults to a Release build using g++, matching the server toolchain
-(`g++ -std=c++20 -O2 -march=native -DNDEBUG -Wall -Werror`), so no extra flags
-are needed.
+This matches the server toolchain (`g++ -std=c++20 -O2 -march=native
+-DNDEBUG -Wall -Werror`) as closely as CMake's Release flags allow.
 
 ## Project Structure
 
@@ -184,7 +183,7 @@ matching_engine_challenge_client/
 |-- bench/
 |   |-- benchmark.cpp            # Benchmark harness (3 scenarios)
 |   |-- order_generator.h/.cpp   # Deterministic order stream generator
-|-- CMakeLists.txt               # Build (C++20, -O2 -march=native, Release/g++ by default)
+|-- CMakeLists.txt               # Build (C++20, -O2 -march=native)
 |-- config.py                    # TEAM_NAME, PASSWORD, SERVER
 |-- submit.py                    # Upload src/ + matching_engine.h and stream the result
 |-- test.py                      # Local build + correctness tests

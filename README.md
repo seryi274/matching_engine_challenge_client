@@ -38,7 +38,7 @@ python check.py             # practice server: builds and tests, not scored
 python submit.py            # the real thing: scored, ranked, rate limited
 ```
 
-No compiler on your machine? Skip the two `cmake` lines and use `python3 check.py`:
+No compiler on your machine? Skip the two `cmake` lines and use `python check.py`:
 the practice server builds and tests your code for you, as often as you like.
 
 `check.py`, `submit.py` and `test.py` need Python 3.8 or newer and nothing else: standard library only, nothing to install.
@@ -65,7 +65,7 @@ the practice server builds and tests your code for you, as often as you like.
    | `PASSWORD` | Chosen by you on your **first** submission. Every later submission for that team name must use the same password. Do not forget it. |
    | `SERVER` | `host:port` given to you by the organisers, for example `3.10.192.154:8000`. |
 
-2. Run `python3 submit.py`. The script:
+2. Run `python submit.py`. The script:
    - builds and runs the correctness tests locally first (skip with `--no-test`; upload despite a local failure with `--force`),
    - uploads every `.cpp .cc .h .hpp .hh .inl .ipp` file directly inside `src/` plus `include/exchange/matching_engine.h`, and nothing else,
    - waits and prints the server's build log, test count and benchmark table as they arrive (`--no-wait` returns right after the upload).
@@ -179,7 +179,7 @@ If you cannot build locally -- no compiler, a locked-down laptop, a Windows
 setup that fights you -- let the practice server do it:
 
 ```bash
-python3 check.py
+python check.py
 ```
 
 It uploads your `src/` and `include/`, compiles them with the same g++ 13 the

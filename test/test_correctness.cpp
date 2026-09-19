@@ -43,6 +43,28 @@ static int tests_passed = 0;
 // and reporting them all in one go beats one failure per round trip.
 struct TestFailure {};
 
+// The values behind a failed assertion. Printing only the expressions leaves a
+// participant guessing what their engine actually returned, which is the one
+// thing the message should be telling them.
+static std::string to_text(OrderStatus status) {
+    switch (status) {
+        case OrderStatus::Accepted:  return "Accepted";
+        case OrderStatus::Filled:    return "Filled";
+        case OrderStatus::Cancelled: return "Cancelled";
+        case OrderStatus::Rejected:  return "Rejected";
+    }
+    return "OrderStatus(" + std::to_string(static_cast<int>(status)) + ")";
+}
+
+static std::string to_text(const std::string& value) {
+    return "\"" + value + "\"";
+}
+
+template <typename T>
+static std::string to_text(const T& value) {
+    return std::to_string(value);
+}
+
 // Output is flushed after the test name and after PASS: when stdout is a pipe
 // (the server captures it), anything still buffered is lost if the engine
 // crashes, and the log would not show which test it crashed in.
@@ -68,8 +90,9 @@ struct TestFailure {};
 #define ASSERT_EQ(a, b) do {                                     \
     auto _a = (a); auto _b = (b);                                \
     if (_a != _b) {                                              \
-        std::printf("FAIL\n    %s:%d: %s != %s\n",              \
-            __FILE__, __LINE__, #a, #b);                         \
+        std::printf("FAIL\n    %s:%d: %s != %s  (got %s, expected %s)\n", \
+            __FILE__, __LINE__, #a, #b,                          \
+            to_text(_a).c_str(), to_text(_b).c_str());           \
         std::fflush(stdout);                                     \
         throw TestFailure{};                                     \
     }                                                            \

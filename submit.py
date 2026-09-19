@@ -2,8 +2,8 @@
 """
 Submit your matching engine to the challenge server.
 
-    python submit.py              build + test locally, upload, wait for the server's verdict
-    python submit.py --no-test    skip the local build and test step
+    python submit.py              upload, wait for the server's verdict (no local build/test)
+    python submit.py --test       build + test locally first, then upload
     python submit.py --no-wait    upload and return immediately
 
 TEAM_NAME, PASSWORD and SERVER come from config.py next to this file;
@@ -236,7 +236,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--password", help="team password (default: PASSWORD in config.py)")
     parser.add_argument("--server", help="host:port of the server (default: SERVER in config.py)")
     parser.add_argument("--dir", help="project root to upload (default: the directory of this script)")
-    parser.add_argument("--no-test", action="store_true", help="skip the local build and test step")
+    parser.add_argument("--no-test", dest="no_test", action="store_true", default=True,
+                         help="skip the local build and test step (default)")
+    parser.add_argument("--test", dest="no_test", action="store_false",
+                         help="run the local build and tests before uploading")
     parser.add_argument("--force", action="store_true", help="upload even if local tests fail")
     parser.add_argument("--no-wait", action="store_true", help="do not wait for the server's result")
     args = parser.parse_args(argv)
@@ -269,7 +272,7 @@ def main(argv: list[str] | None = None) -> int:
             raise SubmitError("Upload exceeds 1 MB; remove generated or binary files from src/")
 
         if not args.no_test:
-            print("Running local build and tests (skip with --no-test)...")
+            print("Running local build and tests...")
             ok, output, summary = run_local_tests(root)
             if ok is None:
                 print(f"  Skipped: {summary}")

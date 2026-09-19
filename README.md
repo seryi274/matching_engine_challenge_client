@@ -66,7 +66,7 @@ the practice server builds and tests your code for you, as often as you like.
    | `SERVER` | `host:port` given to you by the organisers, for example `3.10.192.154:8000`. |
 
 2. Run `python submit.py`. The script:
-   - builds and runs the correctness tests locally first (skip with `--no-test`; upload despite a local failure with `--force`),
+   - uploads directly by default; pass `--test` to build and run the correctness tests locally first (upload despite a local failure with `--force`),
    - uploads every `.cpp .cc .h .hpp .hh .inl .ipp` file directly inside `src/` plus `include/exchange/matching_engine.h`, and nothing else,
    - waits and prints the server's build log, test count and benchmark table as they arrive (`--no-wait` returns right after the upload).
 

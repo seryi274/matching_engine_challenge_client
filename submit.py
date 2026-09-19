@@ -179,9 +179,16 @@ def wait_for_result(server: str, submission_id: int) -> dict:
     raise SubmitError(f"Timed out waiting for the server; check the leaderboard or {url} later")
 
 
-def tail(text: str, lines: int = 30) -> str:
-    parts = text.rstrip().splitlines()
-    return "\n".join(parts[-lines:])
+def failure_log(text: str) -> str:
+    """
+    The complete output of a failed step.
+
+    A compiler error dump is most useful at the TOP -- the first error is the
+    real one and everything after it is fallout -- so printing only the tail
+    hides the part you need. The server already clips what it stores, so this
+    cannot run away.
+    """
+    return text.rstrip()
 
 
 def print_result(sub: dict) -> None:
@@ -191,14 +198,14 @@ def print_result(sub: dict) -> None:
         state = "OK" if build.get("success") else "FAILED"
         print(f"Build:     {state} ({build.get('duration_s', 0):.1f}s)")
         if not build.get("success"):
-            print(tail(build.get("log", "")))
+            print(failure_log(build.get("log", "")))
     tests = sub.get("tests") or {}
     if tests:
         print(f"Tests:     {tests.get('passed', 0)}/{tests.get('total', 0)} passed")
         if tests.get("passed") != tests.get("total"):
             details = tests.get("details") or {}
             raw = details.get("raw_output", "") if isinstance(details, dict) else ""
-            print(tail(raw))
+            print(failure_log(raw))
     benches = sub.get("benchmarks") or {}
     if benches:
         print("Benchmark (best of 3 runs, each the median of 3 iterations):")

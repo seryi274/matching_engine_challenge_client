@@ -16,9 +16,9 @@ This repository is the participant side of the Matching Engine Challenge: the fi
 - The server builds with `g++ -std=c++20 -O2 -march=native -DNDEBUG -Wall -Werror`; warnings are errors.
 
 ### 3. Commands
-- Build and run tests locally: `python3 test.py` (or `cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && ./build/test_correctness`).
+- Build and run tests locally: `python test.py` (or `cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build && ./build/test_correctness`).
 - Benchmark locally: `./build/benchmark`.
-- Submit: fill in `config.py` (`TEAM_NAME`, `PASSWORD`, `SERVER`) and run `python3 submit.py`. The password is set on the team's first submission and must be reused.
+- Submit: fill in `config.py` (`TEAM_NAME`, `PASSWORD`, `SERVER`) and run `python submit.py`. The password is set on the team's first submission and must be reused.
 - `submit.py` and `test.py` use only the Python standard library.
 
 ### 4. Guidelines

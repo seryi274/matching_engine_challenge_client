@@ -2,7 +2,7 @@
 """
 check.py -- try your engine on the practice server.
 
-    python3 check.py
+    python check.py
 
 Uploads your code, builds it and runs the 29 correctness tests on the
 challenge's practice server, then prints the result. You do NOT need a C++
@@ -13,15 +13,15 @@ not benchmark you, and it does not touch the leaderboard.
 
 When the tests pass and you are happy with your engine, submit for real:
 
-    python3 submit.py
+    python submit.py
 
 That one is scored, rate limited, and is what puts you on the leaderboard.
 
 Set TEAM_NAME and PASSWORD in config.py first -- the same ones you use for
 submit.py. Options are passed straight through:
 
-    python3 check.py --dir some/other/project
-    python3 check.py --team alpha --password hunter2
+    python check.py --dir some/other/project
+    python check.py --team alpha --password hunter2
 """
 
 from __future__ import annotations
@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
     server = args.server or configured_practice_server(root, SCRIPT_DIR)
 
     print(f"Practice run on {server} -- not scored, not rate limited, not on the leaderboard.")
-    print("When you are ready for the real thing, use: python3 submit.py\n")
+    print("When you are ready for the real thing, use: python submit.py\n")
 
     # --no-test: the point of the practice server is that you do not need a
     # local toolchain, so never insist on building here first.

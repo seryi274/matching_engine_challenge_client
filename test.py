@@ -2,8 +2,8 @@
 """
 Build in Release mode and run the correctness tests locally.
 
-    python3 test.py            configure + build + run test_correctness
-    python3 test.py --bench    ... and then run the benchmark as well
+    python test.py            configure + build + run test_correctness
+    python test.py --bench    ... and then run the benchmark as well
 
 Needs cmake (3.16+) and a C++20 compiler on PATH: g++ 13+ or clang++ 16+.
 Point the CMAKE environment variable at a cmake binary that is not on PATH.

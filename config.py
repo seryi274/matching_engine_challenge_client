@@ -1,4 +1,4 @@
-# Fill this in before your first submission, then run:  python3 submit.py
+# Fill this in before your first submission, then run:  python submit.py
 #
 # TEAM_NAME  Letters, digits, '-' or '_' (max 32 characters). This is the
 #            name shown on the leaderboard.
@@ -7,7 +7,7 @@
 # SERVER     host:port of the challenge server, given to you by the
 #            organisers, e.g. "3.10.192.154:8000"
 #
-# To try your engine without being scored, run `python3 check.py` instead.
+# To try your engine without being scored, run `python check.py` instead.
 # It builds and tests your code on the practice server -- no C++ compiler
 # needed on your machine, no rate limit, no leaderboard. The address is
 # already set inside check.py; add a TEST_SERVER = "host:port" line below

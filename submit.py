@@ -2,9 +2,9 @@
 """
 Submit your matching engine to the challenge server.
 
-    python3 submit.py              build + test locally, upload, wait for the server's verdict
-    python3 submit.py --no-test    skip the local build and test step
-    python3 submit.py --no-wait    upload and return immediately
+    python submit.py              build + test locally, upload, wait for the server's verdict
+    python submit.py --no-test    skip the local build and test step
+    python submit.py --no-wait    upload and return immediately
 
 TEAM_NAME, PASSWORD and SERVER come from config.py next to this file;
 --team, --password and --server override them.

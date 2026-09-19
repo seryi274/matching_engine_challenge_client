@@ -1,4 +1,14 @@
 cmake_minimum_required(VERSION 3.16)
+
+# Default to a Release build with g++ when the caller doesn't specify
+# otherwise. This dev environment only has g++, cmake and Ninja installed.
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+if(NOT CMAKE_CXX_COMPILER AND NOT DEFINED ENV{CXX})
+    set(CMAKE_CXX_COMPILER g++)
+endif()
+
 project(matching_engine_challenge CXX)
 
 set(CMAKE_CXX_STANDARD 20)

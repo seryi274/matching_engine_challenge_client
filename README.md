@@ -26,8 +26,8 @@ A matching engine is the core of every financial exchange. It receives buy and s
 git clone https://github.com/seryi274/matching_engine_challenge_client.git
 cd matching_engine_challenge_client
 
-# Build in Release mode (Debug builds are 5-10x slower)
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+# Build with Ninja (Release + g++ are now the CMake defaults)
+cmake -B build -G Ninja
 cmake --build build
 
 ./build/test_correctness     # must end with "29/29 tests passed."
@@ -156,34 +156,19 @@ Operations are roughly 70% adds, 20-25% cancels and 5-10% amends across 5 symbol
 
 ## Local Development
 
-### Option A: Native
-
-Requirements: cmake 3.16+ and g++ 13+ or clang++ 16+ (C++20).
+Requirements: cmake 3.16+, g++ 13+ (C++20) and Ninja.
 
 ```bash
-# macOS
-brew install gcc cmake
+cmake -B build -G Ninja
+cmake --build build
 
-# Ubuntu/Debian
-sudo apt-get install g++-13 cmake
-
-# Windows: MSYS2/MinGW-w64 or WSL. Visual Studio builds too, but the server
-# uses GCC, so check your numbers in the dev container before you trust them.
-```
-
-### Option B: Docker dev container
-
-Same toolchain as the server (Ubuntu 24.04, g++ 13), plus perf, valgrind and gdb.
-
-```bash
-docker build -t me-dev -f Dockerfile.dev .
-docker run -it --rm -v "$(pwd)":/workspace -w /workspace me-dev bash
-
-# Inside the container:
-cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build
 ./build/test_correctness
 ./build/benchmark
 ```
+
+CMake defaults to a Release build using g++, matching the server toolchain
+(`g++ -std=c++20 -O2 -march=native -DNDEBUG -Wall -Werror`), so no extra flags
+are needed.
 
 ## Project Structure
 
@@ -199,8 +184,7 @@ matching_engine_challenge_client/
 |-- bench/
 |   |-- benchmark.cpp            # Benchmark harness (3 scenarios)
 |   |-- order_generator.h/.cpp   # Deterministic order stream generator
-|-- CMakeLists.txt               # Build (C++20, -O2 -march=native)
-|-- Dockerfile.dev               # Dev container matching the server toolchain
+|-- CMakeLists.txt               # Build (C++20, -O2 -march=native, Release/g++ by default)
 |-- config.py                    # TEAM_NAME, PASSWORD, SERVER
 |-- submit.py                    # Upload src/ + matching_engine.h and stream the result
 |-- test.py                      # Local build + correctness tests

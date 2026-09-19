@@ -34,8 +34,8 @@ cmake --build build
 ./build/benchmark            # local latency and throughput numbers
 
 # Edit config.py (TEAM_NAME, PASSWORD, SERVER), then try it out:
-python3 check.py             # practice server: builds and tests, not scored
-python3 submit.py            # the real thing: scored, ranked, rate limited
+python check.py             # practice server: builds and tests, not scored
+python submit.py            # the real thing: scored, ranked, rate limited
 ```
 
 No compiler on your machine? Skip the two `cmake` lines and use `python3 check.py`:
